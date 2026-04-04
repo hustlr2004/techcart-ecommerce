@@ -1,0 +1,133 @@
+body {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --soft: #f1f5f9;
+  --accent: #3b82f6;
+  --accent-soft: #dbeafe;
+  --success-soft: #dcfce7;
+  --danger-soft: #fee2e2;
+  --warning-soft: #fef3c7;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --muted: #cbd5e1;
+  --border: #334155;
+  --soft: #0b1220;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.18);
+  --success-soft: rgba(16, 185, 129, 0.18);
+  --danger-soft: rgba(239, 68, 68, 0.18);
+  --warning-soft: rgba(245, 158, 11, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+textarea {
+  font: inherit;
+}
+
+.app-bg {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.app-surface {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.app-surface-soft {
+  background: var(--soft) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.app-text {
+  color: var(--text) !important;
+}
+
+.app-text-muted {
+  color: var(--muted) !important;
+}
+
+.app-border {
+  border-color: var(--border) !important;
+}
+
+body.dark .bg-white,
+body.dark .bg-slate-50,
+body.dark .bg-slate-100 {
+  background-color: var(--card) !important;
+}
+
+body.dark .text-slate-900,
+body.dark .text-slate-800,
+body.dark .text-slate-700 {
+  color: var(--text) !important;
+}
+
+body.dark .text-slate-600,
+body.dark .text-slate-500,
+body.dark .text-slate-400,
+body.dark .text-slate-300,
+body.dark .text-slate-200 {
+  color: var(--muted) !important;
+}
+
+body.dark .border-slate-200,
+body.dark .border-slate-100,
+body.dark .border-slate-300,
+body.dark .border-slate-700,
+body.dark .border-slate-800 {
+  border-color: var(--border) !important;
+}
+
+body.dark .bg-blue-50 {
+  background-color: var(--accent-soft) !important;
+}
+
+body.dark .bg-red-50,
+body.dark .bg-red-100 {
+  background-color: var(--danger-soft) !important;
+}
+
+body.dark .bg-emerald-100 {
+  background-color: var(--success-soft) !important;
+}
+
+body.dark .bg-yellow-100 {
+  background-color: var(--warning-soft) !important;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--border);
+}
