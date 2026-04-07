@@ -8,6 +8,7 @@ const adminRoutes = require('./routes/admin');
 const wishlistRoutes = require('./routes/wishlist');
 const couponRoutes = require('./routes/coupon');
 const chatRoutes = require('./routes/chat');
+const uploadRoutes = require('./routes/upload');
 const authMiddleware = require('./middleware/auth.middleware');
 const isAdmin = require('./middleware/isAdmin');
 const { errorHandler } = require('./middleware/error.middleware');
@@ -31,6 +32,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/upload', uploadRoutes);
 app.use('/api/admin', authMiddleware, isAdmin, adminRoutes);
 
 // Error handler (should be last)

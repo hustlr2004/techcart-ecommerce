@@ -20,6 +20,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { dispatch } = useCart();
   const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [reviewForm, setReviewForm] = useState({ rating: '5', comment: '' });
@@ -35,6 +36,7 @@ export default function ProductDetail() {
         const { data } = await api.get(`/api/products/${id}`);
         if (active) {
           setProduct(data);
+          setSelectedImage(data.images?.[0] || '');
           setError('');
         }
       } catch (err) {
@@ -52,7 +54,8 @@ export default function ProductDetail() {
     };
   }, [id]);
 
-  const image = product?.images?.[0] || 'https://placehold.co/800x600?text=No+Image';
+  const images = product?.images?.length ? product.images : ['https://placehold.co/800x600?text=No+Image'];
+  const image = selectedImage || images[0];
 
   function handleAddToCart() {
     if (!product) return;
@@ -118,8 +121,37 @@ export default function ProductDetail() {
 
         {product ? (
           <section className="grid gap-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl md:grid-cols-[1.05fr_0.95fr]">
-            <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-100">
-              <img className="h-full w-full object-cover" src={image} alt={product.name} />
+            <div className="space-y-4">
+              <div className="group overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-100">
+                <img
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                  src={image}
+                  alt={product.name}
+                />
+              </div>
+
+              {images.length > 1 ? (
+                <div className="grid grid-cols-4 gap-3">
+                  {images.map((thumbnail, index) => (
+                    <button
+                      key={`${thumbnail}-${index}`}
+                      type="button"
+                      onClick={() => setSelectedImage(thumbnail)}
+                      className={`overflow-hidden rounded-2xl border transition ${
+                        image === thumbnail
+                          ? 'border-blue-500 ring-2 ring-blue-200'
+                          : 'border-slate-200 hover:border-blue-300'
+                      }`}
+                    >
+                      <img
+                        src={thumbnail}
+                        alt={`${product.name} thumbnail ${index + 1}`}
+                        className="h-20 w-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
 
             <div className="flex flex-col gap-5">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
 import AdminSidebar from '../../components/admin/AdminSidebar';
+import ImageUpload from '../../components/ImageUpload';
 import api from '../../api/axios';
 import { formatINR } from '../../utils/currency';
 
@@ -11,7 +12,7 @@ const emptyForm = {
   price: '',
   stock: '',
   category: '',
-  images: '',
+  images: [],
 };
 
 export default function ManageProducts() {
@@ -63,7 +64,10 @@ export default function ManageProducts() {
       price: product.price,
       stock: product.stock,
       category: product.category,
-      images: (product.images || []).join(', '),
+      images: (product.images || []).map((image) => ({
+        url: image,
+        public_id: null,
+      })),
     });
   }
 
@@ -77,10 +81,7 @@ export default function ManageProducts() {
       ...form,
       price: Number(form.price),
       stock: Number(form.stock),
-      images: form.images
-        .split(',')
-        .map((item) => item.trim())
-        .filter(Boolean),
+      images: form.images.map((image) => image.url).filter(Boolean),
     };
 
     try {
@@ -92,6 +93,7 @@ export default function ManageProducts() {
 
       setEditingId(null);
       setForm(emptyForm);
+      setError('');
       await loadProducts();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to save product');
@@ -101,6 +103,7 @@ export default function ManageProducts() {
   async function handleDelete(id) {
     try {
       await api.delete(`/api/products/${id}`);
+      setError('');
       await loadProducts();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete product');
@@ -116,6 +119,7 @@ export default function ManageProducts() {
         discountPercentage: Number(couponForm.discountPercentage),
       });
       setCouponForm({ code: '', discountPercentage: '' });
+      setError('');
       await loadCoupons();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to save coupon');
@@ -151,11 +155,21 @@ export default function ManageProducts() {
                 <input className="rounded-2xl border border-slate-200 px-4 py-3" name="category" placeholder="Category" value={form.category} onChange={handleChange} required />
                 <input className="rounded-2xl border border-slate-200 px-4 py-3" name="price" placeholder="Price" value={form.price} onChange={handleChange} required />
                 <input className="rounded-2xl border border-slate-200 px-4 py-3" name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} required />
-                <input className="rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2" name="images" placeholder="Image URLs, comma separated" value={form.images} onChange={handleChange} />
+                <ImageUpload
+                  value={form.images}
+                  onChange={(images) => setForm((prev) => ({ ...prev, images }))}
+                  maxImages={4}
+                />
                 <textarea className="rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2" name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
                 <div className="flex gap-3 md:col-span-2">
                   <button className="rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white" type="submit">Save Product</button>
-                  <button className="rounded-2xl bg-slate-200 px-5 py-3 font-semibold text-slate-700" type="button" onClick={() => setEditingId(null)}>Cancel</button>
+                  <button className="rounded-2xl bg-slate-200 px-5 py-3 font-semibold text-slate-700" type="button" onClick={() => {
+                    setEditingId(null);
+                    setForm(emptyForm);
+                  }}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </form>
             ) : null}

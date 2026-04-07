@@ -1,7 +1,9 @@
 const Groq = require('groq-sdk');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const groq = process.env.GROQ_API_KEY
+  ? new Groq({ apiKey: process.env.GROQ_API_KEY })
+  : null;
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemPrompt = `You are TechCart's friendly AI assistant 
@@ -47,6 +49,13 @@ exports.chat = async (req, res) => {
 
   if (!message || !String(message).trim()) {
     return res.status(400).json({ message: 'Message is required' });
+  }
+
+  if (!groq) {
+    return res.json({
+      reply: smartFallback(message),
+      source: 'fallback',
+    });
   }
 
   // Try Groq first

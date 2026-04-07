@@ -1,6 +1,40 @@
 const Product = require('../models/Product');
+const { isDbConnected } = require('../config/db');
+const sampleProducts = require('../data/sampleProducts');
 
 exports.getAllProducts = async (req, res, next) => {
+  if (!isDbConnected()) {
+    const { keyword = '', category = '', page, limit } = req.query;
+    let products = [...sampleProducts];
+
+    if (String(keyword).trim()) {
+      const search = String(keyword).trim().toLowerCase();
+      products = products.filter((product) => product.name.toLowerCase().includes(search));
+    }
+
+    if (String(category).trim()) {
+      const selectedCategory = String(category).trim();
+      products = products.filter((product) => product.category === selectedCategory);
+    }
+
+    const shouldPaginate = page !== undefined || limit !== undefined;
+    const pageNumber = Math.max(Number(page) || 1, 1);
+    const pageSize = Math.max(Number(limit) || 8, 1);
+
+    if (shouldPaginate) {
+      const paginatedProducts = products.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
+      return res.json({
+        products: paginatedProducts,
+        page: pageNumber,
+        limit: pageSize,
+        totalProducts: products.length,
+        hasMore: pageNumber * pageSize < products.length,
+      });
+    }
+
+    return res.json(products);
+  }
+
   try {
     const { keyword = '', category = '', page, limit } = req.query;
     const query = {};
