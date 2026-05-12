@@ -158,8 +158,8 @@ This project is licensed under the [MIT License](LICENSE).
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@your-username]([https://github.com/hustlr2004])
-- LinkedIn: [your-linkedin]([https://www.linkedin.com/in/gourav-singh-rawat-builds/])
+- GitHub: [hustlr2004]([https://github.com/hustlr2004])
+- LinkedIn: [Gouravsingh]([https://www.linkedin.com/in/gourav-singh-rawat-builds/])
 
 ---
 
